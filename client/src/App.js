@@ -1,24 +1,30 @@
 import React from 'react';
-import logo from './logo.svg';
+import { BrowserRouter as Router } from 'react-router-dom';
 import './App.css';
+
+import {
+  Join_Url,
+  Rooms_Url,
+  Chat_Url,
+} from './routes';
+
+import {
+  Join,
+  Rooms,
+  Chat,
+} from './containers';
+
+import PrivateRoute from './PrivateRoutes';
+import LoggedOutRoute from './LoggedOutRoutes';
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <Router>
+        <LoggedOutRoute exact path={Join_Url} component={Join} />
+        <PrivateRoute exact path={Rooms_Url} component={Rooms} />
+        <PrivateRoute exact path={Chat_Url} component={Chat} />
+      </Router>
     </div>
   );
 }

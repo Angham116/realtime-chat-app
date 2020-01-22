@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "client": "cd client && npm start",
     "server": "nodemon index.js"
   },
   "repository": {

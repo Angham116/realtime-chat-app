@@ -1,11 +1,15 @@
-import React, { Component } from 'react'
+import React from 'react';
 
-export default class Join extends Component {
-  render() {
-    return (
-      <div>
-        Join page
-      </div>
-    )
-  }
+import JoinForm from './Form';
+
+import './style.css';
+
+const Join  = () => {
+  return (
+    <div className="join__container">
+      <h2>Join Chat</h2>
+      <JoinForm />
+    </div>
+  )
 }
+export default Join;

@@ -25,6 +25,12 @@ const io = socketio(http);
 //  listening on the connection event for incoming sockets
 io.on('connection', socket => {
   console.log('socket.io connected');
+  socket.on('join-chat', ({ name, room }, callback) => {
+    console.log(name, room);
+
+    // handling error
+    // callback({ error: 'err-msg'});
+  })
   socket.on('disconnect', () => {
     console.log('socket.io disconnect')
   })

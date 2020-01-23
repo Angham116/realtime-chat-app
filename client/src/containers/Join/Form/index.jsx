@@ -39,6 +39,7 @@ class JoinForm extends Component {
 
   render(){
     const { getFieldDecorator } =this.props.form;
+    const { username } = this.state;
     return (
       <Form className="join-form">
         <Form.Item>
@@ -100,7 +101,7 @@ class JoinForm extends Component {
           >
             Join
           </Button>
-          Or <Link to={Login_Url}>Login</Link>
+          Or <Link to={`${Login_Url}/?name=${username}`}>Login</Link>
         </Form.Item>
       </Form>
     )

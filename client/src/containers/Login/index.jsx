@@ -1,11 +1,13 @@
-import React, { Component } from 'react'
+import React from 'react';
 
-export default class Login extends Component {
-  render() {
-    return (
-      <div>
-        Login
-      </div>
-    )
-  }
+import LoginForm from './Form';
+
+const Join  = () => {
+  return (
+    <div className="join__container">
+      <h2>Join Chat</h2>
+      <LoginForm />
+    </div>
+  )
 }
+export default Join;

@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import axios from 'axios';
 import { Link } from 'react-router-dom';
 import { Form, Icon, Input, Button } from 'antd';
 
@@ -12,7 +13,24 @@ import {
 class JoinForm extends Component {
   state = {
     confirmDirty: false,
+    username: '',
+    email: '',
+    password: '',
+    confirmPass: '',
   };
+
+  handleChange = e => this.setState({ [e.target.name] : e.target.value });
+
+  signupUser = async () => {
+    const {
+      username,
+      email,
+      password,
+      // confirmPass
+    } = this.state;
+    const newUser = await axios.post('/api/signup', { username, email, password });
+    console.log(4444444, newUser)
+  }
 
   handleConfirmBlur = e => {
     const { value } = e.target;
@@ -21,6 +39,7 @@ class JoinForm extends Component {
 
   render(){
     const { getFieldDecorator } =this.props.form;
+    const { username } = this.state;
     return (
       <Form className="join-form">
         <Form.Item>
@@ -28,7 +47,9 @@ class JoinForm extends Component {
               rules: [{ required: true, message: 'Please input your email!' }],
             })(
               <Input
+                name='email'
                 placeholder="Enter your E-mail"
+                onChange={this.handleChange}
               />,
             )}
           </Form.Item>
@@ -39,6 +60,8 @@ class JoinForm extends Component {
               <Input
                 prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />}
                 placeholder="Enter your Username"
+                name='username'
+                onChange={this.handleChange}
               />,
             )}
           </Form.Item>
@@ -50,7 +73,10 @@ class JoinForm extends Component {
                   message: 'Please input your password!',
                 }
               ],
-            })(<Input.Password />)}
+            })(<Input.Password
+                name='password'
+                onChange={this.handleChange}
+            />)}
           </Form.Item>
           <Form.Item label="Confirm Password" hasFeedback>
             {getFieldDecorator('confirm', {
@@ -60,13 +86,22 @@ class JoinForm extends Component {
                   message: 'Please confirm your password!',
                 }
               ],
-            })(<Input.Password onBlur={this.handleConfirmBlur} />)}
+            })(<Input.Password
+              onBlur={this.handleConfirmBlur}
+              name='confirmPass'
+              onChange={this.handleChange}
+              />)}
           </Form.Item>
           <Form.Item>
-          <Button type="primary" htmlType="submit" className="join-form-button">
+          <Button
+            type="primary"
+            htmlType="submit"
+            className="join-form-button"
+            onClick={this.signupUser}
+          >
             Join
           </Button>
-          Or <Link to={Login_Url}>Login</Link>
+          Or <Link to={`${Login_Url}/?name=${username}`}>Login</Link>
         </Form.Item>
       </Form>
     )

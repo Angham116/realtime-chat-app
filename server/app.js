@@ -40,7 +40,12 @@ io.on('connection', socket => {
   * @param socket.id is ID of new user joined
   */
   socket.on('join-chat', ({ name, room }, callback) => {
-    const { error, newUser } = addUser({ id: socket.id, name, room });
+    // const { username, room } = user;
+    const { error, newUser } = addUser({ userId: socket.id, username: name, room });
+    
+    if(error) {
+      return callback(error);
+    }
 
     // handling the msg when someone join the room
     socket.emit('join-chat-msg', {
@@ -56,9 +61,6 @@ io.on('connection', socket => {
       // this is telling the room users new user was joined
       text: `${newUser.username} has joind`
     })
-    if(error) {
-      return callback(error);
-    }
     // socket.join(the name of room that the uer want to join)
     socket.join(newUser.room)
 
@@ -72,8 +74,8 @@ io.on('connection', socket => {
   * @param socket.id is ID of user
   */
   socket.on('send-msg', (message, callback) => {
-    const user = getUser(socket.id);
-    io.to(user.room.emit('msg', { user: user.username, text: message }));
+    const { user } = getUser({userId: socket.id });
+    io.to(user.room).emit('msg', { user: user.username, text: message });
     callback();
   });
 

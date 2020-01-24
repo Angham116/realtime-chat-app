@@ -14,7 +14,6 @@ const addUser = ({ userId, username, room }) => {
 
   const newUser = { userId, username, room };
   users.push(newUser);
-
   return { newUser }
 };
 
@@ -27,7 +26,7 @@ const removeUser = (id) => {
 };
 
 const getUser = (id) => {
-  const user = users.find(user => user.userId === id);
+  const user = users.find(user => user.userId === id.userId);
   return { user }
 
 };

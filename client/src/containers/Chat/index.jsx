@@ -2,8 +2,9 @@ import React, { useState, useEffect } from 'react';
 import queryString from 'query-string';
 import io from 'socket.io-client';
 
-import { Input, Button } from 'antd';
 import InfoBar from '../../components/InfoBar';
+import Messages from '../../components/Mesages';
+import Input from '../../components/Input';
 
 let socket;
 const END_POINT = 'localhost:5000';
@@ -54,14 +55,10 @@ const Chat = ({ location }) => {
   return (
     <div className="chat__container">
       <InfoBar room={room} />
-      <form onSubmit={e => sendMessage(e)}>
-        <Input
-          value={message}
-          onChange={({ target: { value } }) => setMessage(value)}
-          // onKeyPress={event => event.key === 'Enter' ? sendMessage(event) : null}
-        />
-        <Button onClick={e => sendMessage(e)}>send</Button>
-      </form>
+      <Messages />
+      <div>
+        <Input message={message} setMessage={setMessage} sendMessage={sendMessage} />
+      </div>
     </div>
   )
 }

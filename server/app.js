@@ -65,6 +65,18 @@ io.on('connection', socket => {
     callback();
   });
 
+  /*
+  * @description socket.on('send-msg', cb) is event when user is send msg on chat room
+  * @description getUser is a service used to get user who send the msg
+  * @param user is object of user who send the msg 
+  * @param socket.id is ID of user
+  */
+  socket.on('send-msg', (message, callback) => {
+    const user = getUser(socket.id);
+    io.to(user.room.emit('msg', { user: user.username, text: message }));
+    callback();
+  });
+
   socket.on('disconnect', () => {
     console.log('socket.io disconnect')
   })

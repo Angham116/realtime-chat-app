@@ -14,7 +14,6 @@ mongoose.connection.on('connected', () => {
 });
 
 mongoose.connection.on('error', (err) => {
-  console.log(111111)
   console.error(err)
 });
 

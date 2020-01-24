@@ -7,6 +7,13 @@ const compress = require('compression');
 const helmet = require('helmet');
 const cors = require('cors');
 
+const {
+  addUser,
+  getUser,
+  removeUser,
+  getUsersInRoom,
+} = require('./Users');
+
 const routes = require('./routers');
 
 app.use(express.json());
@@ -25,6 +32,51 @@ const io = socketio(http);
 //  listening on the connection event for incoming sockets
 io.on('connection', socket => {
   console.log('socket.io connected');
+
+  /*
+  * @description socket.on('join-chat', cb) is event when user is joining the chat
+  * @description addUser is a service used to add new user
+  * @param { name, user } is object of new uer
+  * @param socket.id is ID of new user joined
+  */
+  socket.on('join-chat', ({ name, room }, callback) => {
+    const { error, newUser } = addUser({ id: socket.id, name, room });
+
+    // handling the msg when someone join the room
+    socket.emit('join-chat-msg', {
+      user: 'admin', 
+      // this is telling the joind user welcome
+      text: `${newUser.username}, welcome to the ${newUser.room} room`
+    });
+
+    // sending a message to everyone else except for the socket that starts it.
+    // socket.broadcast.to(the name of room that the user is targeting)
+    socket.broadcast.to(newUser.room).emit('join-chat-msg', {
+      user: 'admin',
+      // this is telling the room users new user was joined
+      text: `${newUser.username} has joind`
+    })
+    if(error) {
+      return callback(error);
+    }
+    // socket.join(the name of room that the uer want to join)
+    socket.join(newUser.room)
+
+    callback();
+  });
+
+  /*
+  * @description socket.on('send-msg', cb) is event when user is send msg on chat room
+  * @description getUser is a service used to get user who send the msg
+  * @param user is object of user who send the msg 
+  * @param socket.id is ID of user
+  */
+  socket.on('send-msg', (message, callback) => {
+    const user = getUser(socket.id);
+    io.to(user.room.emit('msg', { user: user.username, text: message }));
+    callback();
+  });
+
   socket.on('disconnect', () => {
     console.log('socket.io disconnect')
   })

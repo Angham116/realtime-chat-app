@@ -18,7 +18,12 @@ const Chat = ({ location }) => {
     setName(name);
     setRoom(room)
     // console.log(555, socket)
-    socket.emit('join-chat', { name, room });
+    socket.emit('join-chat', { name, room }, () => {
+    });
+    return () => {
+      socket.emit('disconnect');
+      socket.off();
+    }
   }, [END_POINT, location.search])
   // [END_POINT, location.search] where is the effect happen
   // when rs for the server http or change the search contents

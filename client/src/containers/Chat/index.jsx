@@ -3,6 +3,7 @@ import queryString from 'query-string';
 import io from 'socket.io-client';
 
 import { Input, Button } from 'antd';
+import InfoBar from '../../components/InfoBar';
 
 let socket;
 const END_POINT = 'localhost:5000';
@@ -42,19 +43,17 @@ const Chat = ({ location }) => {
   */
   const sendMessage = e => {
     e.preventDefault();
-    // console.log(222, e)
-    // console.log(333, message)
     if(message){
       socket.emit('send-msg', message, () => {
         setMessage('');
-        // console.log(777, message)
       })
     }
   }
   console.log(888, message);
   console.log(999, messages);
   return (
-    <div>
+    <div className="chat__container">
+      <InfoBar room={room} />
       <form onSubmit={e => sendMessage(e)}>
         <Input
           value={message}

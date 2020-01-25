@@ -12,9 +12,13 @@ export default function Message({ message: {user, text}, name }) {
     <>
     {msgSentByCurrentUser ? (
       <div className="message__sent-container">
-        <p className="sender">{username}</p>
-        <div className="sent__msg-box">
-          <p className="message__sent-text color__white">{text}</p>
+        {username === 'admin' ? '' : <p className="sender">{username}</p> }
+        <div className={`${username === 'admin' && 'admin__msg'} sent__msg-box`}>
+          <p
+            className="message__sent-text color__white"
+          >
+            {text}
+          </p>
         </div>
       </div>
 
@@ -22,10 +26,14 @@ export default function Message({ message: {user, text}, name }) {
     :
     (
       <div className="message__recived-container">
-        <div className="recieved__msg-box">
-          <p className="message__recieved-text color__dark">{text}</p>
+        <div className={`${user === 'admin' && 'admin__msg'} recieved__msg-box`}>
+          <p
+            className="message__recieved-text color__dark"
+          >
+            {text}
+          </p>
         </div>
-        <p className="reciever">{user}</p>
+        {user === 'admin' ? '' : <p className="sender">{user}</p> }
       </div>
     )}
     </>

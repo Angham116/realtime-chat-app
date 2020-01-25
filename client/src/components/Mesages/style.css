@@ -1,0 +1,6 @@
+.messages__container {
+  padding: 5% 2%;
+  overflow: auto;
+  flex: auto;
+  text-align: right;
+}

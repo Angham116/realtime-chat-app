@@ -13,7 +13,7 @@ const Chat = ({ location }) => {
   const [name, setName] = useState('');
   const [room, setRoom] = useState('');
   const [message, setMessage] = useState('');
-  const [messages, setMessages] = useState('');
+  const [messages, setMessages] = useState([]);
 
   // useEffect when user join the chat room
   useEffect(() => {
@@ -22,21 +22,25 @@ const Chat = ({ location }) => {
     const { name, room } = data;
     setName(name);
     setRoom(room)
-    socket.emit('join-chat', { name, room }, () => {
+    socket.emit('join-chat', { name, room }, (error) => {
+      if(error){
+        alert(error);
+      }
     });
-    return () => {
-      socket.emit('disconnect');
-      socket.off();
-    }
     // [END_POINT, location.search] where is the effect happen
     // when rs for the server http or change the search contents
   }, [END_POINT, location.search]);
 
   // useEffect for handling messages
   useEffect(() => {
-    socket.on('join-chat-msg', (message) => {
+    socket.on('chat-msg', (message) => {
       setMessages([...messages, message]);
-    })
+    });
+
+    return () => {
+      socket.emit('disconnect');
+      socket.off();
+    }
   }, [messages]);
 
   /*
@@ -50,15 +54,11 @@ const Chat = ({ location }) => {
       })
     }
   }
-  console.log(888, message);
-  console.log(999, messages);
   return (
     <div className="chat__container">
       <InfoBar room={room} />
-      <Messages />
-      <div>
-        <Input message={message} setMessage={setMessage} sendMessage={sendMessage} />
-      </div>
+      <Messages messages={messages} />
+      <Input message={message} setMessage={setMessage} sendMessage={sendMessage} />
     </div>
   )
 }

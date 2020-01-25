@@ -48,7 +48,7 @@ io.on('connection', socket => {
     }
 
     // handling the msg when someone join the room
-    socket.emit('join-chat-msg', {
+    socket.emit('chat-msg', {
       user: 'admin', 
       // this is telling the joind user welcome
       text: `${newUser.username}, welcome to the ${newUser.room} room`
@@ -56,7 +56,7 @@ io.on('connection', socket => {
 
     // sending a message to everyone else except for the socket that starts it.
     // socket.broadcast.to(the name of room that the user is targeting)
-    socket.broadcast.to(newUser.room).emit('join-chat-msg', {
+    socket.broadcast.to(newUser.room).emit('chat-msg', {
       user: 'admin',
       // this is telling the room users new user was joined
       text: `${newUser.username} has joind`
@@ -75,7 +75,7 @@ io.on('connection', socket => {
   */
   socket.on('send-msg', (message, callback) => {
     const { user } = getUser({userId: socket.id });
-    io.to(user.room).emit('msg', { user: user.username, text: message });
+    io.to(user.room).emit('chat-msg', { user: user.username, text: message });
     callback();
   });
 

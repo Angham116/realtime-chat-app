@@ -81,6 +81,10 @@ io.on('connection', socket => {
 
   socket.on('disconnect', () => {
     console.log('socket.io disconnect')
+    const user = removeUser(socket.id);
+    if(user){
+      io.to(user.room).emit('chat-msg', {user: 'admin', text: `${user.username} has left`});
+    }
   })
 });
 

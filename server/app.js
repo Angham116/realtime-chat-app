@@ -40,10 +40,15 @@ io.on('connection', socket => {
   * @param socket.id is ID of new user joined
   */
   socket.on('join-chat', ({ name, room }, callback) => {
-    const { error, newUser } = addUser({ id: socket.id, name, room });
+    // const { username, room } = user;
+    const { error, newUser } = addUser({ userId: socket.id, username: name, room });
+    
+    if(error) {
+      return callback(error);
+    }
 
     // handling the msg when someone join the room
-    socket.emit('join-chat-msg', {
+    socket.emit('chat-msg', {
       user: 'admin', 
       // this is telling the joind user welcome
       text: `${newUser.username}, welcome to the ${newUser.room} room`
@@ -51,14 +56,11 @@ io.on('connection', socket => {
 
     // sending a message to everyone else except for the socket that starts it.
     // socket.broadcast.to(the name of room that the user is targeting)
-    socket.broadcast.to(newUser.room).emit('join-chat-msg', {
+    socket.broadcast.to(newUser.room).emit('chat-msg', {
       user: 'admin',
       // this is telling the room users new user was joined
       text: `${newUser.username} has joind`
     })
-    if(error) {
-      return callback(error);
-    }
     // socket.join(the name of room that the uer want to join)
     socket.join(newUser.room)
 
@@ -72,13 +74,17 @@ io.on('connection', socket => {
   * @param socket.id is ID of user
   */
   socket.on('send-msg', (message, callback) => {
-    const user = getUser(socket.id);
-    io.to(user.room.emit('msg', { user: user.username, text: message }));
+    const { user } = getUser({userId: socket.id });
+    io.to(user.room).emit('chat-msg', { user: user.username, text: message });
     callback();
   });
 
   socket.on('disconnect', () => {
     console.log('socket.io disconnect')
+    const user = removeUser(socket.id);
+    if(user){
+      io.to(user.room).emit('chat-msg', {user: 'admin', text: `${user.username} has left`});
+    }
   })
 });
 

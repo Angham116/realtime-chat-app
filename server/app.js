@@ -62,7 +62,10 @@ io.on('connection', socket => {
       text: `${newUser.username} has joind`
     })
     // socket.join(the name of room that the uer want to join)
-    socket.join(newUser.room)
+    socket.join(newUser.room);
+
+    //
+    io.to(newUser.room).emit('room-data', { room: newUser.room, users: getUsersInRoom(newUser.room) })
 
     callback();
   });
@@ -76,11 +79,17 @@ io.on('connection', socket => {
   socket.on('send-msg', (message, callback) => {
     const { user } = getUser({userId: socket.id });
     io.to(user.room).emit('chat-msg', { user: user.username, text: message });
+    io.to(user.room).emit('room-data', { room: user.room, users: getUsersInRoom(user.room) });
     callback();
   });
 
   socket.on('disconnect', () => {
     console.log('socket.io disconnect')
+    /*
+  * @description socket.on('disconnect', cb) is event when user left chat room
+  * @description removeUser is a service used to leave user from chat room
+  * @param user is object of user who left the room
+  */
     const user = removeUser(socket.id);
     if(user){
       io.to(user.room).emit('chat-msg', {user: 'admin', text: `${user.username} has left`});

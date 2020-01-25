@@ -5,6 +5,7 @@ import io from 'socket.io-client';
 import InfoBar from '../../components/InfoBar';
 import Messages from '../../components/Mesages';
 import Input from '../../components/Input';
+import UsersInRoom from '../../components/UsersInRoom';
 
 let socket;
 const END_POINT = 'localhost:5000';
@@ -14,6 +15,7 @@ const Chat = ({ location }) => {
   const [room, setRoom] = useState('');
   const [message, setMessage] = useState('');
   const [messages, setMessages] = useState([]);
+  const [users, getUsers] = useState('');
 
   // useEffect when user join the chat room
   useEffect(() => {
@@ -27,16 +29,20 @@ const Chat = ({ location }) => {
         alert(error);
       }
     });
-    // [END_POINT, location.search] where is the effect happen
+    // [location.search] where is the effect happen
     // when rs for the server http or change the search contents
-  }, [END_POINT, location.search]);
+  }, [location.search]);
 
+  // us
   // useEffect for handling messages
   useEffect(() => {
     socket.on('chat-msg', (message) => {
       setMessages([...messages, message]);
     });
 
+    socket.on('room-data', ({users}) => {
+      getUsers(users);
+    })
     return () => {
       socket.emit('disconnect');
       socket.off();
@@ -55,10 +61,13 @@ const Chat = ({ location }) => {
     }
   }
   return (
-    <div className="chat__container">
-      <InfoBar room={room} />
-      <Messages messages={messages} name={name} />
-      <Input message={message} setMessage={setMessage} sendMessage={sendMessage} />
+    <div>
+      <div className="chat__container">
+        <InfoBar room={room} />
+        <Messages messages={messages} name={name} />
+        <Input message={message} setMessage={setMessage} sendMessage={sendMessage} />
+      </div>
+      <UsersInRoom users={users} />
     </div>
   )
 }

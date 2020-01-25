@@ -1,0 +1,13 @@
+.online__people-container {
+  text-align: left;
+}
+
+.online__user {
+  padding-left: 6px;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.active {
+  margin-left: 18px;
+}

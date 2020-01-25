@@ -32,7 +32,7 @@ const getUser = (id) => {
 };
 
 const getUsersInRoom = (room) => {
-  return users.find(user => user.room === room);
+  return users;
 }
 
 module.exports = {

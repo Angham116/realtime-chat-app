@@ -14,8 +14,6 @@ const {
   getUsersInRoom,
 } = require('./Users');
 
-const routes = require('./routers');
-
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
@@ -96,8 +94,6 @@ io.on('connection', socket => {
     }
   })
 });
-
-app.use('/api', routes);
 
 // Serve React (client) files
 if (process.env.NODE_ENV === 'production') {

@@ -27,9 +27,9 @@ const Chat = ({ location }) => {
         alert(error);
       }
     });
-    // [END_POINT, location.search] where is the effect happen
+    // [location.search] where is the effect happen
     // when rs for the server http or change the search contents
-  }, [END_POINT, location.search]);
+  }, [location.search]);
 
   // useEffect for handling messages
   useEffect(() => {

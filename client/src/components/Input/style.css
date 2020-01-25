@@ -1,13 +1,14 @@
 .input__msg-form {
   display: flex;
-  border-top: 2px solid #D3D3D3;
 }
 
 .msg__input {
   border-radius: 0;
-  padding: 5%;
+  padding: 3%;
   width: 80%;
   font-size: 1.2em;
+  border: none;
+  border-top: 2px solid #D3D3D3;
 }
 
 .msg__input:focus, textarea:focus, select:focus{

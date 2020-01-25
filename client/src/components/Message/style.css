@@ -1,4 +1,38 @@
-.message__container {
+.message__sent-text,
+.recieved__msg-box {
+  width: 100%;
+  letter-spacing: 0;
+  font-size: 1.1em;
+  word-wrap: break-word;
+}
+
+.message__sent-text {
+  float: left;
+}
+
+.recieved__msg-box {
+  float: right;
+}
+
+.color__white {
+  color: white;
+}
+
+.color__dark {
+  color: #5f5f5f;
+}
+
+.sender,
+.reciever {
+  display: flex;
+  align-items: center;
+  font-family: Helvetica;
+  color: #828282;
+  letter-spacing: 0.3px;
+  padding-left: 10px;
+}
+
+.sent__msg-box {
   background: #2979ff;
   border-radius: 20px;
   padding: 5px 20px;
@@ -7,14 +41,19 @@
   max-width: 80%;
 }
 
-.message__text {
-  width: 100%;
-  letter-spacing: 0;
-  float: left;
-  font-size: 1.1em;
-  word-wrap: break-word;
+.recieved__msg-box {
+  background: #eee;
+  border-radius: 20px;
+  padding: 5px 20px;
+  color: white;
+  display: inline-block;
+  max-width: 80%;
 }
 
-.color__white {
-  color: white;
+.sender {
+  float: right;
+}
+
+.reciever {
+  float: left;
 }
